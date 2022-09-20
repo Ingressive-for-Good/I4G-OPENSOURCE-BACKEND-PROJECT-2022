@@ -1,0 +1,30 @@
+{
+  "name": "i4g-opensource-backend-project-2022",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/pragmaticAweds/I4G-OPENSOURCE-BACKEND-PROJECT-2022.git",
+  "author": "Abdul-Afiz <jimohafeez738@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "build": "yarn build src",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "helmet": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.20"
+  }
+}
