@@ -50,5 +50,7 @@ yarn dev
 Technologies used in the project:
 
 - NodeJS
+- Typescript
 - Express
 - MongoDB
+
