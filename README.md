@@ -30,7 +30,7 @@ git clone your forked url && cd dir
 <p>3. install dependencies</p>
 
 ```
-yarn
+npm install
 ```
 
 <p>4. switch to another branch to start your work.</p>
@@ -42,7 +42,7 @@ git checkout -b your-branch-name
 <p>5. start development</p>
 
 ```
-yarn dev
+npm start:dev
 ```
 
 <h2>💻 Built with</h2>
@@ -50,5 +50,8 @@ yarn dev
 Technologies used in the project:
 
 - NodeJS
+- Typescript
 - Express
 - MongoDB
+
+NOTE: Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs
