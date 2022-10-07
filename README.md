@@ -54,4 +54,6 @@ Technologies used in the project:
 - Express
 - MongoDB
 
-NOTE: Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs
+NOTE: 
+    1) Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs
+    2) all images are stored on cloudinary, only the link is saved to the database

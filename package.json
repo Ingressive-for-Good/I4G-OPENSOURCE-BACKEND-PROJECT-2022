@@ -6,14 +6,15 @@
   "author": "Abdul-Afiz <jimohafeez738@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "tsc": "rm -rf ./dist && tsc",
+    "tsc": "rm -rf ./build && tsc",
     "dev": "ts-node src/index.ts",
-    "start": "npm run tsc && node dist/index.js",
+    "start": "npm run tsc && node build/index.js",
     "start:dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
     "@types/cors": "^2.8.12",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.32.0",
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "helmet": "^6.0.0",
