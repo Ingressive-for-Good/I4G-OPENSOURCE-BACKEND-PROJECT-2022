@@ -7,7 +7,7 @@ interface IProduct extends Document {
     productName: string
     description: string
     price: number
-    productImages: [string]
+    productImages: []
     isSwappable: boolean
     condition: "very good" | "good" | "bad" | "very bad"
     category: ICategory["_id"]
