@@ -1,21 +1,20 @@
-// username
-// firstname
-// profilePicture
-// lastname
-// phoneNo
-// password
-// address
-// isAdmin
-// friends/follower
-// userId
-// productName
-// description
-// price
-// productImage
+import mongoose, { Schema, model, Document } from "mongoose"
 
-import mongoose from "mongoose";
+export interface IUser extends Document {
+    username: string;
+    firstname: string;
+    lastname: string;
+    profilePicture: string;
+    phoneNo: string;
+    password: string;
+    address: string;
+    isAdmin: boolean;
+    followers: []
+    createdAt: Date
+    updatedAt: Date
+}
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -47,10 +46,12 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     followers: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "User",
+        type: Array,
+        default: []
     }
     
 }, { timestamps: true });
 
-export default mongoose.model("Product", userSchema)
+const User = model<IUser>("user", userSchema)
+
+export default User
