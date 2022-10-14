@@ -1,12 +1,14 @@
+
+
 class baseError extends Error {
-    protected success!: boolean
-    protected errorName!: string
-    statusCode!: string
-    errMessage!: string
+    success
+    errorName
+    statusCode
+    errMessage
 }
 
 export class clientError extends baseError {
-    constructor (errmessage: string, statuscode) {
+    constructor (errmessage, statuscode) {
         super()
         this.success = false
         this.errorName = "client error"
@@ -16,7 +18,7 @@ export class clientError extends baseError {
 }
 
 export class serverError extends baseError {
-    constructor (errmessage: string, statuscode) {
+    constructor (errmessage, statuscode) {
         super()
         this.success = false
         this.errorName = "server error"

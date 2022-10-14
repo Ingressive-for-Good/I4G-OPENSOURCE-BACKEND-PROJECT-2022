@@ -1,4 +1,4 @@
-import winston, {createLogger, format, transports} from "winston" 
+const {createLogger, format, transports} = require("winston")
 
 const {printf, combine, colorize, errors, timestamp} = format
 
@@ -6,7 +6,7 @@ const logFormat = printf( ({level, timestamp, message, stack}) => {
     return `${timestamp} ${level}: ${stack || message}`
 })
 
-export const logger = createLogger({
+const logger = createLogger({
     level: "info",
     format: combine(
         colorize(),
@@ -16,3 +16,5 @@ export const logger = createLogger({
     ),
     transports: [ new transports.Console() ]
 })
+
+module.exports = {logger}

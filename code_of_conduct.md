@@ -36,3 +36,4 @@ Disagreements are natural. Always strive to understand differing views and resol
 ### When unsure, ask for help
 
 Communication is key, and communication is as simple as it sounds. When you need help, ask the community.
+Footer
