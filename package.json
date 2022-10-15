@@ -1,35 +1,42 @@
 {
-  "name": "i4g-opensource-backend-project-2022",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start:dev": "nodemon src/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022/issues"
-  },
-  "homepage": "https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022#readme",
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "cloudinary": "^1.32.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "helmet": "^6.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.5",
-    "morgan": "^1.10.0",
-    "winston": "^3.8.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  }
+    "name": "i4g-opensource-backend-project-2022",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start:dev": "nodemon src/index.js",
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022/issues"
+    },
+    "homepage": "https://github.com/ORIYOMI289/I4G-OPENSOURCE-BACKEND-PROJECT-2022#readme",
+    "dependencies": {
+        "bcrypt": "^5.1.0",
+        "cloudinary": "^1.32.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "helmet": "^6.0.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.6.5",
+        "morgan": "^1.10.0",
+        "winston": "^3.8.2"
+    },
+    "devDependencies": {
+        "eslint": "^8.25.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "nodemon": "^2.0.20",
+        "prettier": "^2.7.1"
+    }
 }

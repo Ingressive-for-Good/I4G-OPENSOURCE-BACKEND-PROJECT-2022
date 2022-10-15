@@ -1,10 +1,8 @@
+require('dotenv').config()
 
+const { env } = process
 
-require("dotenv").config()
-
-const {env}= process
-
-const PORT =  env.port || 5000
+const PORT = env.port || 5000
 const CLOUD_NAME = env.cloud_name
 const API_KEY = env.api_key
 const API_SECRET = env.api_secret
@@ -15,5 +13,5 @@ module.exports = {
     CLOUD_NAME,
     API_KEY,
     API_SECRET,
-    DB_URI
+    DB_URI,
 }

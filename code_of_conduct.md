@@ -1,5 +1,4 @@
-THE I4G OPENSOURCE COMMUNITY CODE OF CONDUCT
-----------------------------------
+## THE I4G OPENSOURCE COMMUNITY CODE OF CONDUCT
 
 The I4G community is a mix of professionals and individuals working on an open source project with the aim of acheiving a particular goal. Collaboration, community governance, and support are keys to make this a successful one.
 
