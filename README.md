@@ -8,17 +8,17 @@
 
 Here're some of the project's best features:
 
-- Users can put up their item for sell.
-- Users who are interested in an item can buy from the seller.
-- Users can chat up the item seller.
-- It is P2P platform no payment is processed.
+-   Users can put up their item for sell.
+-   Users who are interested in an item can buy from the seller.
+-   Users can chat up the item seller.
+-   It is P2P platform no payment is processed.
 
 <h2>Link to figma design && User Flow<h2>
   
 <a href="https://www.figma.com/file/cK9hICwy4Tcs7Nw2mXh0Aj/I4G-Open-Source?node-id=2%3A686" target="_blank">Figma Design link</a>
 
- <a href="https://docs.google.com/document/d/1oHGzqxiLVKEQIqG4-rfzH9SYnIv6cKozLW1FLvubLcU/edit?usp=sharing" target="_blank">Userflow</a> 
-  
+<a href="https://docs.google.com/document/d/1oHGzqxiLVKEQIqG4-rfzH9SYnIv6cKozLW1FLvubLcU/edit?usp=sharing" target="_blank">Userflow</a>
+
 <h2>🛠️ Installation Steps:</h2>
 
 <p>2. clone the repo</p>
@@ -49,11 +49,10 @@ npm start:dev
 
 Technologies used in the project:
 
-- NodeJS
-- Typescript
-- Express
-- MongoDB
+-   NodeJS
+-   Express
+-   MongoDB
 
-NOTE: 
-    1) Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs
-    2) all images are stored on cloudinary, only the link is saved to the database
+NOTE: 1) Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs 
+2) all images are stored on cloudinary, only the link is saved to the database
+3) before you push your code changes, run the eslint script and prettier script in package.json 
