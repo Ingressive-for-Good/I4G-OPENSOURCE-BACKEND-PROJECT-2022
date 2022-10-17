@@ -3,6 +3,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { cloudinary } = require('./utils/helpers')
 const userRouter = require('./modules/user.routes')
+const categoryRoutes = require('./routes/category.route')
 
 const app = express()
 
@@ -13,6 +14,8 @@ app.use(express.urlencoded({ extended: true }))
     .use('/user', userRouter)
 
 app.use('*', cloudinary)
+
+app.use('/categories', categoryRoutes)
 
 app.get('/test', (req, res) => {
     res.status(200).json({
