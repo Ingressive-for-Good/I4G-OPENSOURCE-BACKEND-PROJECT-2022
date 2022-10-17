@@ -27,6 +27,12 @@ const userSchema = mongoose.Schema(
         address: {
             type: String,
         },
+        accountNumber: {
+            type: String,
+        },
+        bank: {
+            type: String,
+        },
         cart: {
             type: Array,
             default: [],
