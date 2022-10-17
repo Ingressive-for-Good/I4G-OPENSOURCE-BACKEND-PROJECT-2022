@@ -56,12 +56,51 @@ module.exports = {
         }
     },
 
-            // category.....
+    deleteSingleProduct: async(req, res)=>{
+        const {productId} = req.params
+        try {
+            await Product.deleteOne({_id: productId})
+                .then(deleted=>{
+                    res.status(201).json({
+                        ...deleted,
+                        message: "product has been deleted.",
+                        status: 201
+                    })
+                })
         } catch (error) {
-
+            return res.status(501).json({
+                message: "Could not delete product.",
+                status: 404,
+                ...error
+            })  
         }
     },
-    
+
+    interestedProducts: async (req, res) => {
+        const user = req.user
+        try {
+            await Product.find({user: user._id})
+                .lean()
+                .select("name category interestedUsers")
+                .then(result=>{
+                    return res.status(200).json(result)
+                })
+                .catch(err=>{
+                    return res.status(501).json({
+                        message: "Could not fetch products.",
+                        status: 404,
+                        ...err
+                    })
+                })         
+        } catch (error) {
+            return res.status(501).json({
+                message: "Could not get products.",
+                status: 404,
+                ...error
+            }) 
+        }
+        
+    }
 }
 
 function validateProduct(user, name, categoryId, descriptions, images, price) {
