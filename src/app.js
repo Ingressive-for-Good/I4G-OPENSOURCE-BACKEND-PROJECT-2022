@@ -6,6 +6,12 @@ const session = require('express-session')
 const path = require("path")
 
 const { cloudinary } = require('./utils/helpers')
+const profileRoute = require('./modules/profile.route')
+
+const userRoutes = require("../src/modules/user.routes")
+
+const userRouter = require('./modules/user.routes')
+const categoryRoutes = require('./routes/category.route')
 
 const userRoutes = require("../src/modules/user.routes")
 
@@ -34,6 +40,8 @@ app.use(express.urlencoded({ extended: true }))
 
 //route handler
 app.use("/user/v1", userRoutes)
+
+app.use('/profile', profileRoute)
 
 //redirect to google sign in page
 app.get(

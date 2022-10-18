@@ -53,6 +53,4 @@ Technologies used in the project:
 -   Express
 -   MongoDB
 
-NOTE: 1) Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs 
-2) all images are stored on cloudinary, only the link is saved to the database
-3) before you push your code changes, run the eslint script and prettier script in package.json 
+NOTE: 1) Do not use "console.log" anywhere in the project, use "winston" instead, for a more detail logs 2) all images are stored on cloudinary, only the link is saved to the database 3) before you push your code changes, run the eslint script and prettier script in package.json
