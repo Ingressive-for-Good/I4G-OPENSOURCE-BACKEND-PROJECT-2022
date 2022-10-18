@@ -1,3 +1,8 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const User = require('./user.model')
+const { API_SECRET } = require('../utils/config')
+
 module.exports = {
     authenticateUser: async (req, res)=>{
         const {email, password} = req.body
@@ -5,7 +10,7 @@ module.exports = {
             const user = await User.findOne({email})
             if(user){
                 bcrypt.compare(password, user.password)
-                    .then(geniun=>{
+                    .then(_=>{
                         const token = jwt.sign({
                             ...user,
                             password: undefined
