@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const User = require('./user.model')
 const { API_SECRET } = require('../utils/config')
 
+const {handleResponse} = require("../utils/helpers")
+
 module.exports = {
     authenticateUser: async (req, res)=>{
         const {email, password} = req.body

@@ -1,20 +1,16 @@
 const mongoose = require('mongoose')
+const passport = require('passport')
 
 const { app } = require('./app')
 const { logger } = require('./helper/logger')
-const { PORT, DB_URI } = require('./utils/config')
+const { PORT} = require('./utils/config')
+const {database, googleOAuth} = require("./helper/connect")
 
-mongoose
-    .connect(DB_URI, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-    })
-    .then(() => {
-        logger.info('connected to the database successfully')
-    })
-    .catch((err) => {
-        logger.info(err)
-    })
+
+
+
+database(mongoose)
+googleOAuth(passport)
 
 app.listen(PORT, (req, res) => {
     logger.info('server is up and running')
