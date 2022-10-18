@@ -1,24 +1,9 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const User = require('./user.model')
+const { API_SECRET } = require('../utils/config')
 
 const {handleResponse} = require("../utils/helpers")
-const userService = require("./user.service")
-
-
-async function createUserController (req, res, next) {
-
-try {
-
-    const response = await userService.createUser(req.body)
-
-    res.json(handleResponse(response))
-} catch (error) {
-    res.json(error)
-    next(error)
-}
-}
-
-module.exports = {
-    createUserController
-}
 
 module.exports = {
     authenticateUser: async (req, res)=>{
@@ -27,7 +12,7 @@ module.exports = {
             const user = await User.findOne({email})
             if(user){
                 bcrypt.compare(password, user.password)
-                    .then(geniun=>{
+                    .then(_=>{
                         const token = jwt.sign({
                             ...user,
                             password: undefined
