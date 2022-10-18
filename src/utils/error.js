@@ -5,7 +5,7 @@ class baseError extends Error {
     errMessage
 }
 
-export class clientError extends baseError {
+ class clientError extends baseError {
     constructor(errmessage, statuscode) {
         super()
         this.success = false
@@ -15,7 +15,7 @@ export class clientError extends baseError {
     }
 }
 
-export class serverError extends baseError {
+ class serverError extends baseError {
     constructor(errmessage, statuscode) {
         super()
         this.success = false
@@ -23,4 +23,10 @@ export class serverError extends baseError {
         this.errMessage = errmessage
         this.statusCode = statuscode
     }
+}
+
+
+module.exports = {
+    clientError,
+    serverError
 }
