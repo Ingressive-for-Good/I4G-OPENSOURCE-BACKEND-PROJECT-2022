@@ -1,3 +1,4 @@
+
 const router= require("express")()
 const passport = require("passport")
 
@@ -12,6 +13,10 @@ const {
 
 router.post("/user/signUp", inputValidator(signUpValidate), userController.createUserController)
 
+const { authenticateUser } = require('./user.controller')
 
+const router = require('express').Router()
+
+router.post('/auth', authenticateUser)
 
 module.exports = router
