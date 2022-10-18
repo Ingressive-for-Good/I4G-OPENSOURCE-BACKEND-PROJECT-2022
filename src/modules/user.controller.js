@@ -10,7 +10,7 @@ module.exports = {
             const user = await User.findOne({email})
             if(user){
                 bcrypt.compare(password, user.password)
-                    .then(geniun=>{
+                    .then(_=>{
                         const token = jwt.sign({
                             ...user,
                             password: undefined
