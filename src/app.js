@@ -6,12 +6,9 @@ const session = require('express-session')
 const path = require("path")
 
 const { cloudinary } = require('./utils/helpers')
+
+const productRoute = require('./modules/product.routes')
 const profileRoute = require('./modules/profile.route')
-
-const userRoutes = require("../src/modules/user.routes")
-
-const userRouter = require('./modules/user.routes')
-const categoryRoutes = require('./routes/category.route')
 
 const userRoutes = require("../src/modules/user.routes")
 
@@ -27,6 +24,7 @@ app.use(express.urlencoded({ extended: true }))
     .use(express.json({ limit: '50kb' }))
     .use(cors())
     .use(helmet())
+    .use('/product', productRoute)
     .use('*', cloudinary)
     .use(session({
         secret: 'keyboard cat',
