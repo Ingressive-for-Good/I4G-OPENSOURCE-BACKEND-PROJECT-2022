@@ -8,14 +8,8 @@ const path = require("path")
 const { cloudinary } = require('./utils/helpers')
 const profileRoute = require('./modules/profile.route')
 
-const userRoutes = require("../src/modules/user.routes")
+const userRoutes = require("../src/modules/user/user.routes")
 
-const userRouter = require('./modules/user.routes')
-const categoryRoutes = require('./routes/category.route')
-
-const userRoutes = require("../src/modules/user.routes")
-
-const userRouter = require('./modules/user.routes')
 const categoryRoutes = require('./routes/category.route')
 
 const app = express()
@@ -39,37 +33,46 @@ app.use(express.urlencoded({ extended: true }))
    
 
 //route handler
-app.use("/user/v1", userRoutes)
+app.use("/api/v1", userRoutes)
+    .use('/api/v1/profile', profileRoute)
+    .use('/categories', categoryRoutes)
 
-app.use('/profile', profileRoute)
 
 //redirect to google sign in page
 app.get(
     '/oauth/google', 
-    passport.authenticate("google", 
-    {
+    passport.authenticate("google", {
         scope: ["profile", "email"]
-    }
-    )
+    })
 )
-    .use('/user', userRouter)
 
-
-//redirect user to th success or failure page
+//redirect user to the success or failure page from google sign in page
 app.get(
     '/oauth2/redirect/google', 
-    passport.authenticate("google", 
-    {
+    passport.authenticate("google", {
         failureRedirect: '/failure',
         successRedirect: '/success'
-    }
-    )
+    })
 )
 
+//redirect user to facebook login page
+app.get(
+    "/auth/facebook",
+    passport.authenticate("facebook",{
+        scope: ["public_profile", "email"]
+    } )
+)
+
+//redirect user from facebook login page to success or failure login page
+app.get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+        failureRedirect: "/failure",
+        successRedirect: "/success"
+    })
+)
 
 app.get('/failure', (req, res) => {
-app.use('/categories', categoryRoutes)
-
     res.status(200).json({
         message: 'server failed',
     })
@@ -80,7 +83,7 @@ app.get('/success', (req, res) => {
     })
 })
 
-app.get('/google/login',
+app.get('/OAuth/login',
     (req, res) => {
         res.render('auth')
     }

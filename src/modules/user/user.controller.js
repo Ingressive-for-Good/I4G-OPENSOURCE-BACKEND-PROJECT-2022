@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('./user.model')
-const { API_SECRET } = require('../utils/config')
 
-const {handleResponse} = require("../utils/helpers")
+const User = require('./user.model')
+const { API_SECRET } = require('../../utils/config')
+const {createUser} = require("./user.service")
+const {handleResponse} = require("../../utils/helpers")
 
 module.exports = {
     authenticateUser: async (req, res)=>{
@@ -55,6 +56,20 @@ module.exports = {
             // handle the error, in the preceding middleware.
             // next(error)            
         }
+    },
+
+    createUser: async(req, res) => {
+       try {
+
+            const response = await createUser(
+                req.body
+            )
+
+            res.json( handleResponse(response) )
+       } catch (error) {
+        
+            return error
+       }
     }
 
 }
