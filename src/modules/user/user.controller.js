@@ -6,6 +6,7 @@ const { API_SECRET } = require('../../utils/config')
 const {createUser} = require("./user.service")
 const {handleResponse} = require("../../utils/helpers")
 
+
 module.exports = {
     authenticateUser: async (req, res)=>{
         const {email, password} = req.body
