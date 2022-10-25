@@ -1,6 +1,6 @@
-const User = require('./user.model')
-const Product = require('../models/product.model')
-const Category = require('../models/category.model')
+const User = require('../user/user.model')
+const Product = require('./product.model')
+const Category = require('../category/category.model')
 
 module.exports = {
     createProduct: async (req, res) => {

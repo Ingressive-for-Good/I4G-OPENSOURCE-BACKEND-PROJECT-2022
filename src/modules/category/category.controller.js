@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const categoryService = require('../services/category.service')
+const categoryService = require('./category.service')
 
 exports.createCategory = async (req, res) => {
     try {

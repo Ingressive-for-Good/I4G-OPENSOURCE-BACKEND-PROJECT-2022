@@ -7,13 +7,10 @@ const path = require("path")
 
 const { cloudinary } = require('./utils/helpers')
 
-const productRoute = require('./modules/product.routes')
-const profileRoute = require('./modules/profile.route')
-
-const userRoutes = require("../src/modules/user.routes")
-
-const userRouter = require('./modules/user.routes')
-const categoryRoutes = require('./routes/category.route')
+const productRoutes = require('./modules/product/product.routes')
+const profileRoutes = require('./modules/profile/profile.route')
+const userRoutes = require("./modules/user/user.routes")
+const categoryRoutes = require('./modules/category/category.route')
 
 const app = express()
 
@@ -24,7 +21,6 @@ app.use(express.urlencoded({ extended: true }))
     .use(express.json({ limit: '50kb' }))
     .use(cors())
     .use(helmet())
-    .use('/product', productRoute)
     .use('*', cloudinary)
     .use(session({
         secret: 'keyboard cat',
@@ -38,8 +34,9 @@ app.use(express.urlencoded({ extended: true }))
 
 //route handler
 app.use("/user/v1", userRoutes)
-
-app.use('/profile', profileRoute)
+app.use('/profile', profileRoutes)
+app.use('/categories', categoryRoutes)
+app.use('/products', productRoutes)
 
 //redirect to google sign in page
 app.get(
@@ -50,8 +47,6 @@ app.get(
     }
     )
 )
-    .use('/user', userRouter)
-
 
 //redirect user to th success or failure page
 app.get(
@@ -64,9 +59,7 @@ app.get(
     )
 )
 
-
 app.get('/failure', (req, res) => {
-app.use('/categories', categoryRoutes)
 
     res.status(200).json({
         message: 'server failed',

@@ -1,5 +1,5 @@
-const { clientError } = require("../utils/error")
-const { hashPassword } = require("../utils/helpers")
+const { clientError } = require("../../utils/error")
+const { hashPassword } = require("../../utils/helpers")
 const user = require("./user.model")
 const {
     signUpValidate
