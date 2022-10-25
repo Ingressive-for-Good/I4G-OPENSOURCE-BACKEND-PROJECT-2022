@@ -21,6 +21,7 @@ const userSchema = new Schema({
         imdId: String
     },
     role: {
+        type: String,
         enum: ['user', 'superAdmin', 'admin'],
         default: 'user',
     }
