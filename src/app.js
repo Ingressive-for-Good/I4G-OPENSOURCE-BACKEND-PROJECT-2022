@@ -31,10 +31,10 @@ app.use(express.urlencoded({ extended: true }))
     .use(passport.session())
 
 //routes handler
-app.use('/api/v1/auth', userRoutes)
-    .use('/api/v1/profile', profileRoutes)
-    .use('/api/v1/categories', categoryRoutes)
-    .use('/api/v1/products', productRoutes)
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/categories', categoryRoutes)
+app.use('/api/v1/products', productRoutes)
+app.use('/api/v1/profile', profileRoutes)
 
 // redirect to google sign in page
 app.get(
