@@ -1,6 +1,6 @@
 const Joi = require("joi")
 
-const { validator } = require("../utils/helpers")
+const { validator } = require("../../utils/helpers")
 
 const signUpValidate = Joi.object({
     fullname: Joi.string().trim().required(),
