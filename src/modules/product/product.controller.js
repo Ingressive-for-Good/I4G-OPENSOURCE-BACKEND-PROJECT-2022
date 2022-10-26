@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const productService = require('./product.service')
 const categoryService = require('../category/category.service')
-const { cloudinary } = require('../../utils/helpers')
+const cloudinary = require('../../utils/cloudinary')
+const { handleResponse } = require('../../utils/helpers')
 
 module.exports = {
     createProduct: async (req, res) => {
@@ -44,7 +45,7 @@ module.exports = {
                 req.body.user,
                 req.body
             )
-            res.status(201).send(product)
+            res.status(201).json(handleResponse(product))
         } catch (err) {
             res.status(500).send({ message: err.message })
         }
@@ -52,7 +53,7 @@ module.exports = {
     getAllProducts: async (req, res) => {
         try {
             const products = await productService.getAllProducts()
-            res.status(200).send(products)
+            res.status(200).json(handleResponse(products))
         } catch (err) {
             res.status(500).send({ message: err.message })
         }
