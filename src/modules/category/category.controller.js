@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const categoryService = require('../services/category.service')
+const categoryService = require('./category.service')
+const { handleResponse } = require('../../utils/helpers')
 
 exports.createCategory = async (req, res) => {
     try {
@@ -14,13 +15,12 @@ exports.createCategory = async (req, res) => {
         const newCategory = await categoryService.createCategoryService(
             req.body
         )
-        res.status(201).send({ data: newCategory })
+        res.status(201).json(handleResponse(newCategory))
     } catch (err) {
         res.status(500).send({ message: err.message })
     }
 }
 
-// still to modify
 exports.deleteCategory = async (req, res) => {
     const { categoryId } = req.params
 
@@ -39,7 +39,7 @@ exports.deleteCategory = async (req, res) => {
                 .send({ message: `Category ${categoryId} not found` })
         }
         await categoryService.deleteCategoryService(categoryId)
-        res.status(200).send({ message: 'Category deleted successfully' })
+        res.status(201).json(handleResponse({}))
     } catch (err) {
         res.status(500).send({ message: err.message })
     }
