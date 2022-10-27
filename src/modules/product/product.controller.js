@@ -83,4 +83,20 @@ module.exports = {
             res.status(500).send({ message: err.message })
         }
     },
+
+    getSingleProduct: async (req, res) => {
+        const { productId } = req.params
+        try {
+            const product = await productService.getProductById(productId)
+            if (!product)
+                return res.status(404).send({
+                    success: false,
+                    message: `Product with id:${productId} doesn't exist`,
+                })
+
+            res.status(200).json(handleResponse(product))
+        } catch (error) {
+            res.status(500).send({ message: error.message })
+        }
+    },
 }
