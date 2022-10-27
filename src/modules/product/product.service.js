@@ -10,3 +10,8 @@ exports.getAllProducts = async () => {
     const products = await Product.find({})
     return products
 }
+
+exports.getProductById = async (id) => {
+    const product = await Product.findById(id)
+    return product
+}
