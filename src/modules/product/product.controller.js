@@ -126,13 +126,14 @@ module.exports = {
                     .send({ message: 'Images field are required' })
             }
             await productService.updateSingleProduct(productId, req.body)
-            res.status(200).json(handleResponse({...product}))
+           return res.status(200).json(handleResponse({...product}))
         } catch (err) {
             res.status(500).send({ message: err.message })
         }
     },
     hasImages: async (req, res, next) => {
-        if (req.body.images.length === 0) {
+        const {images} = req.body
+        if (!images) {
             next()
         }
     }
