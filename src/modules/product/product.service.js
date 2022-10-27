@@ -20,3 +20,8 @@ exports.getSingleProduct = async (productId) => {
 exports.deleteProduct = async (productId) => {
     return await Product.findOneAndDelete({ _id: productId })
 }
+
+exports.getProductById = async (id) => {
+    const product = await Product.findById(id)
+    return product
+}
