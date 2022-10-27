@@ -41,10 +41,7 @@ module.exports = {
                     .status(400)
                     .send({ message: 'Images field are required' })
             }
-            const product = await productService.createProduct(
-                req.body.user,
-                req.body
-            )
+            const product = await productService.createProduct(req.body)
             res.status(201).json(handleResponse(product))
         } catch (err) {
             res.status(500).send({ message: err.message })
