@@ -83,4 +83,57 @@ module.exports = {
             res.status(500).send({ message: err.message })
         }
     },
+    updateProduct: async (req, res) => {
+        const { productId } = req.params
+        // any user can update product. PS: get authenticated user from req.user
+        const user = req.body.user || req.user
+
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).send({ message: 'Invalid product ID' })
+        }
+        try {
+            const product = await productService.getSingleProduct(productId)
+
+            if (!product) {
+                return res.status(404).send({ message: 'Product not found' })
+            }
+            if (product.user != user) {
+                return res.status(401).send({ message: 'Not Authorized' })
+            }
+           
+            // if req.body.images is empty, only update other fields.
+            if(req.body.images){
+                const imageIds = product.images.map((image) => image.public_id)
+                if (imageIds.length > 0) {
+                    imageIds.forEach(async (id) => {
+                        await cloudinary.uploader.destroy(id)
+                    })
+                }
+                for (const file of req.files) {
+                    const imageFile = await cloudinary.uploader.upload(file.path, {
+                        folder: 'Products',
+                    })
+                    req.body.images.push({
+                        url: imageFile.secure_url,
+                        public_id: imageFile.public_id,
+                    })
+                }
+            }
+            
+            if (req.body.images.length === 0) {
+                return res
+                    .status(400)
+                    .send({ message: 'Images field are required' })
+            }
+            await productService.updateSingleProduct(productId, req.body)
+            res.status(200).json(handleResponse({...product}))
+        } catch (err) {
+            res.status(500).send({ message: err.message })
+        }
+    },
+    hasImages: async (req, res, next) => {
+        if (req.body.images.length === 0) {
+            next()
+        }
+    }
 }
