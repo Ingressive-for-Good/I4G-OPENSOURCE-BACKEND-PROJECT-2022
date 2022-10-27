@@ -20,3 +20,7 @@ exports.getSingleProduct = async (productId) => {
 exports.deleteProduct = async (productId) => {
     return await Product.findOneAndDelete({ _id: productId })
 }
+
+exports.updateSingleProduct = async (_id, new_body) => {
+    return await Product.findOneAndUpdate(_id, new_body)
+}
