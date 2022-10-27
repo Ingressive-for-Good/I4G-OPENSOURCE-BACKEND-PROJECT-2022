@@ -8,100 +8,131 @@ module.exports = {
             const user = req.user // user must be loggend in to perform this request.
             const { name, categoryId, descriptions, images, price } = req.body
             const categoryObj = await Category.findOne({ _id: categoryId })
-            const validProduct = validateProduct(user, name, categoryObj, descriptions, images, price)
+            const validProduct = validateProduct(
+                user,
+                name,
+                categoryObj,
+                descriptions,
+                images,
+                price
+            )
             if (validProduct) {
-               await Product.exists({ name })
-                    .then(exist => {
-                        if (!exist) {
-                            const product = new Product({ 
-                                ...req.body,
-                                user: user._id,
-                                name, 
-                                category: categoryId, 
-                                descriptions, 
-                                images, 
-                                price 
-                            })
-                            product.save()
-                                .then(saved=>{
-                                    res.status(201).json({...saved, message: "product created"})
+                await Product.exists({ name }).then((exist) => {
+                    if (!exist) {
+                        const product = new Product({
+                            ...req.body,
+                            user: user._id,
+                            name,
+                            category: categoryId,
+                            descriptions,
+                            images,
+                            price,
+                        })
+                        product
+                            .save()
+                            .then((saved) => {
+                                res.status(201).json({
+                                    ...saved,
+                                    message: 'product created',
                                 })
-                                .catch(err=>{
-                                    return res.status(501).json({
-                                        message: "Could not save product.",
-                                        status: 404,
-                                        ...err
-                                    })
-                                })
-                        } else {
-                            return res.status(409).json({
-                                message: "Product with name already exist.",
-                                status: 409
                             })
-                        }
-                        
-                    })
+                            .catch((err) => {
+                                return res.status(501).json({
+                                    message: 'Could not save product.',
+                                    status: 404,
+                                    ...err,
+                                })
+                            })
+                    } else {
+                        return res.status(409).json({
+                            message: 'Product with name already exist.',
+                            status: 409,
+                        })
+                    }
+                })
             } else {
                 return res.status(404).json({
-                    message: "Missing required fields.",
-                    status: 404
+                    message: 'Missing required fields.',
+                    status: 404,
                 })
             }
         } catch (error) {
             return res.status(501).json({
-                message: "Could not save product.",
+                message: 'Could not save product.',
                 status: 404,
-                ...error
+                ...error,
             })
         }
     },
 
-    deleteSingleProduct: async(req, res)=>{
-        const {productId} = req.params
+    deleteSingleProduct: async (req, res) => {
+        const { productId } = req.params
         try {
-            await Product.deleteOne({_id: productId})
-                .then(deleted=>{
-                    res.status(201).json({
-                        ...deleted,
-                        message: "product has been deleted.",
-                        status: 201
-                    })
+            await Product.deleteOne({ _id: productId }).then((deleted) => {
+                res.status(201).json({
+                    ...deleted,
+                    message: 'product has been deleted.',
+                    status: 201,
                 })
+            })
         } catch (error) {
             return res.status(501).json({
-                message: "Could not delete product.",
+                message: 'Could not delete product.',
                 status: 404,
-                ...error
-            })  
+                ...error,
+            })
         }
     },
 
     interestedUsers: async (req, res) => {
-        const {productId} = req.params
+        const { productId } = req.params
         const user = req.user
         try {
-            await Product.find({user: user._id, _id: productId})
+            await Product.find({ user: user._id, _id: productId })
                 .lean()
-                .select("name category interestedUsers")
-                .then(result=>{
+                .select('name category interestedUsers')
+                .then((result) => {
                     return res.status(200).json(result)
                 })
-                .catch(err=>{
+                .catch((err) => {
                     return res.status(501).json({
-                        message: "Could not fetch products.",
+                        message: 'Could not fetch products.',
                         status: 404,
-                        ...err
+                        ...err,
                     })
-                })         
+                })
         } catch (error) {
             return res.status(501).json({
-                message: "Could not get products.",
+                message: 'Could not get products.',
                 status: 404,
-                ...error
-            }) 
+                ...error,
+            })
         }
-        
-    }
+    },
+    getSingleProduct: async (req, res) => {
+        const { productId } = req.params
+        const user = req.user
+        try {
+            const product = await Product.find({
+                user: user._id,
+                _id: productId,
+            }).lean()
+
+            if (!product)
+                return res.status(404).json({
+                    message: 'Product not Found',
+                    status: 404,
+                })
+
+            return res.status(200).json({ product, status: 200 })
+        } catch (error) {
+            return res.status(501).json({
+                message: 'Could not get products.',
+                status: 501,
+                ...error,
+            })
+        }
+    },
 }
 
 function validateProduct(user, name, categoryId, descriptions, images, price) {
