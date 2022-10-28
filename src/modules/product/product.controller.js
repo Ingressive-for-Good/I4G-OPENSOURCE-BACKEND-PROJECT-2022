@@ -3,6 +3,7 @@ const productService = require('./product.service')
 const categoryService = require('../category/category.service')
 const cloudinary = require('../../utils/cloudinary')
 const { handleResponse } = require('../../utils/helpers')
+const { logger } = require('../../helper/logger')
 
 module.exports = {
     createProduct: async (req, res) => {
@@ -85,12 +86,21 @@ module.exports = {
     },
     updateProduct: async (req, res) => {
         const { productId } = req.params
+        if (
+            !req.body.name ||
+            !req.body.description ||
+            !req.body.price ||
+            !req.body.condition
+        ) {
+            return res
+                .status(400)
+                .send({ message: 'Required fields are missing' })
+        }
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).send({ message: 'Invalid product ID' })
         }
         try {
             const product = await productService.getSingleProduct(productId)
-            // logger.info(product)
             const user = product.user || req.body.user
             if (!product) {
                 return res.status(404).send({ message: 'Product not found' })
@@ -128,11 +138,12 @@ module.exports = {
                     productId,
                     req.body
                 )
+                
                 return res
                     .status(200)
                     .send(
                         handleResponse({
-                            ...p,
+                            ...p._doc,
                             info: 'successfully updated product',
                         })
                     )
