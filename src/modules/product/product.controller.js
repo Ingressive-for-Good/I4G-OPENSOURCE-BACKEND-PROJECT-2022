@@ -20,7 +20,7 @@ module.exports = {
             if (!mongoose.Types.ObjectId.isValid(req.body.category)) {
                 return res.status(400).send({ message: 'Invalid category id' })
             }
-            const category = await categoryService.findCategoryById(
+            const category = await categoryService.findCategoryByIdService(
                 req.body.category
             )
             if (!category) {
@@ -85,55 +85,66 @@ module.exports = {
     },
     updateProduct: async (req, res) => {
         const { productId } = req.params
-        // any user can update product. PS: get authenticated user from req.user
-        const user = req.body.user || req.user
-
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).send({ message: 'Invalid product ID' })
         }
         try {
             const product = await productService.getSingleProduct(productId)
-
+            // logger.info(product)
+            const user = product.user || req.body.user
             if (!product) {
                 return res.status(404).send({ message: 'Product not found' })
             }
             if (product.user != user) {
                 return res.status(401).send({ message: 'Not Authorized' })
             }
-           
-            // if req.body.images is empty, only update other fields.
-            if(req.body.images){
-                const imageIds = product.images.map((image) => image.public_id)
+
+            req.body.images = []
+            const imageIds = product.images.map((image) => image.public_id)
+            if (req.files) {
                 if (imageIds.length > 0) {
                     imageIds.forEach(async (id) => {
                         await cloudinary.uploader.destroy(id)
                     })
                 }
+
                 for (const file of req.files) {
-                    const imageFile = await cloudinary.uploader.upload(file.path, {
-                        folder: 'Products',
-                    })
+                    const imageFile = await cloudinary.uploader.upload(
+                        file.path,
+                        {
+                            folder: 'Products',
+                        }
+                    )
                     req.body.images.push({
                         url: imageFile.secure_url,
                         public_id: imageFile.public_id,
                     })
                 }
+            } else {
+                req.body.images.push(...product.images)
             }
-            
-            if (req.body.images.length === 0) {
+            try {
+                const p = await productService.updateSingleProduct(
+                    productId,
+                    req.body
+                )
                 return res
-                    .status(400)
-                    .send({ message: 'Images field are required' })
+                    .status(200)
+                    .send(
+                        handleResponse({
+                            ...p,
+                            info: 'successfully updated product',
+                        })
+                    )
+            } catch (err) {
+                return res.status(500).send({ ...err, message: err.message })
             }
-            await productService.updateSingleProduct(productId, req.body)
-           return res.status(200).json(handleResponse({...product}))
         } catch (err) {
-            res.status(500).send({ message: err.message })
+            return res.status(500).send({ message: err.message })
         }
     },
     hasImages: async (req, res, next) => {
-        const {images} = req.body
-        if (!images) {
+        if (!req.files) {
             next()
         }
     },
