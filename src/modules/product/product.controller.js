@@ -3,6 +3,7 @@ const productService = require('./product.service')
 const categoryService = require('../category/category.service')
 const cloudinary = require('../../utils/cloudinary')
 const { handleResponse } = require('../../utils/helpers')
+const { logger } = require('../../helper/logger')
 
 module.exports = {
     createProduct: async (req, res) => {
@@ -20,7 +21,7 @@ module.exports = {
             if (!mongoose.Types.ObjectId.isValid(req.body.category)) {
                 return res.status(400).send({ message: 'Invalid category id' })
             }
-            const category = await categoryService.findCategoryById(
+            const category = await categoryService.findCategoryByIdService(
                 req.body.category
             )
             if (!category) {
@@ -83,7 +84,81 @@ module.exports = {
             res.status(500).send({ message: err.message })
         }
     },
+    updateProduct: async (req, res) => {
+        const { productId } = req.params
+        if (
+            !req.body.name ||
+            !req.body.description ||
+            !req.body.price ||
+            !req.body.condition
+        ) {
+            return res
+                .status(400)
+                .send({ message: 'Required fields are missing' })
+        }
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).send({ message: 'Invalid product ID' })
+        }
+        try {
+            const product = await productService.getSingleProduct(productId)
+            const user = product.user || req.body.user
+            if (!product) {
+                return res.status(404).send({ message: 'Product not found' })
+            }
+            if (product.user != user) {
+                return res.status(401).send({ message: 'Not Authorized' })
+            }
 
+            req.body.images = []
+            const imageIds = product.images.map((image) => image.public_id)
+            if (req.files) {
+                if (imageIds.length > 0) {
+                    imageIds.forEach(async (id) => {
+                        await cloudinary.uploader.destroy(id)
+                    })
+                }
+
+                for (const file of req.files) {
+                    const imageFile = await cloudinary.uploader.upload(
+                        file.path,
+                        {
+                            folder: 'Products',
+                        }
+                    )
+                    req.body.images.push({
+                        url: imageFile.secure_url,
+                        public_id: imageFile.public_id,
+                    })
+                }
+            } else {
+                req.body.images.push(...product.images)
+            }
+            try {
+                const p = await productService.updateSingleProduct(
+                    productId,
+                    req.body
+                )
+                
+                return res
+                    .status(200)
+                    .send(
+                        handleResponse({
+                            ...p._doc,
+                            info: 'successfully updated product',
+                        })
+                    )
+            } catch (err) {
+                return res.status(500).send({ ...err, message: err.message })
+            }
+        } catch (err) {
+            return res.status(500).send({ message: err.message })
+        }
+    },
+    hasImages: async (req, res, next) => {
+        if (!req.files) {
+            next()
+        }
+    },
     getSingleProduct: async (req, res) => {
         const { productId } = req.params
         try {

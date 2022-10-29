@@ -21,6 +21,10 @@ exports.deleteProduct = async (productId) => {
     return await Product.findOneAndDelete({ _id: productId })
 }
 
+exports.updateSingleProduct = async (_id, new_body) => {
+    return await Product.findOneAndUpdate(_id, new_body, { new: true })
+}
+
 exports.getProductById = async (id) => {
     const product = await Product.findById(id)
     return product
