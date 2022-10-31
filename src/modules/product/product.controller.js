@@ -133,20 +133,23 @@ module.exports = {
             } else {
                 req.body.images.push(...product.images)
             }
+            if (req.body.images.length === 0) {
+                return res
+                    .status(400)
+                    .send({ message: 'Images field are required' })
+            }
             try {
                 const p = await productService.updateSingleProduct(
                     productId,
                     req.body
                 )
-                
-                return res
-                    .status(200)
-                    .send(
-                        handleResponse({
-                            ...p._doc,
-                            info: 'successfully updated product',
-                        })
-                    )
+
+                return res.status(200).send(
+                    handleResponse({
+                        ...p._doc,
+                        info: 'successfully updated product',
+                    })
+                )
             } catch (err) {
                 return res.status(500).send({ ...err, message: err.message })
             }
