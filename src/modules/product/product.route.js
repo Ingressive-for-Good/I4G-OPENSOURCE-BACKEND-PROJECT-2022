@@ -3,6 +3,7 @@ const {
     createProduct,
     getAllProducts,
     deleteProduct,
+    updateProduct,
     getSingleProduct,
 } = require('./product.controller')
 
@@ -12,6 +13,7 @@ const multerErrorHandler = require('../../middlewares/multer-errorHandler')
 router.post('/', [upload.array('images', 3), multerErrorHandler], createProduct)
 router.get('/', getAllProducts)
 router.delete('/:productId', deleteProduct)
+router.patch('/:productId', [upload.array('images', 3), multerErrorHandler], updateProduct)
 router.get('/:productId', getSingleProduct)
 
 module.exports = router
