@@ -8,7 +8,6 @@ exports.createProduct = async (productData) => {
 
 exports.getAllProducts = async () => {
     const products = await Product.find({})
-        .populate('user', ['fullname', 'email'])
         .sort({ _id: -1 })
     return products
 }
