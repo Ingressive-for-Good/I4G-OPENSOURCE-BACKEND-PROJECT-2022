@@ -77,7 +77,13 @@ async function deleteAccount(req, res) {
             await cloudinary.uploader.destroy(user.profilePicture.imgId)
         }
         await deleteUser(_id)
-        res.status(200).send({
+        res.cookie('token', '', {
+            path: '/',
+            httpOnly: true,
+            // expires in 0s
+            expires: new Date(0),
+        })
+        return res.status(200).send({
             success: true,
             message: 'Account deletion successful',
         })

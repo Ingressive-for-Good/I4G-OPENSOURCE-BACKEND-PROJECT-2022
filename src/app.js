@@ -12,6 +12,7 @@ const profileRoutes = require('./modules/profile/profile.route')
 const categoryRoutes = require('./modules/category/category.route')
 const chatRoutes = require('./modules/chat/chat.route')
 const messageRoutes = require('./modules/message/message.route')
+const cartRoutes = require('./modules/cart/cart.route')
 
 const app = express()
 
@@ -41,6 +42,7 @@ app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/profile', profileRoutes)
 app.use('/api/v1/chats', chatRoutes)
 app.use('/api/v1/messages', messageRoutes)
+app.use('/api/v1/carts', cartRoutes)
 
 // redirect to google sign in page
 app.get(
