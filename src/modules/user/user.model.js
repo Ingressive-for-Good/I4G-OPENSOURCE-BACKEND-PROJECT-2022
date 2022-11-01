@@ -1,32 +1,52 @@
+const { Schema, model } = require('mongoose')
 
-const {Schema, model}= require("mongoose")
+const userSchema = new Schema(
+    {
+        googleId: String,
+        facebookId: String,
+        fullname: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            unique: true,
+            required: true,
+            trim: true,
+        },
+        phone: {
+            type: String,
+        },
+        password: {
+            type: String,
+            unqiue: true,
+        },
+        address: {
+            type: String,
+        },
+        profilePicture: {
+            imgUrl: String,
+            imgId: String,
+        },
+        role: {
+            type: String,
+            enum: ['user', 'sub admin', 'admin'],
+            default: 'user',
+        },
+        accountNumber: {
+            type: Number,
+            trim: true,
+        },
+        accountName: String,
+        bank: String,
+    },
+    { timestamps: true }
+)
 
-const userSchema = new Schema({
-    googleId: String,
-    facebookId: String,
-    fullname: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        unqiue: true
-    },
-    profilePicture: {
-        imgUrl: String,
-        imdId: String
-    },
-    role: {
-        type: String,
-        enum: ['user', 'superAdmin', 'admin'],
-        default: 'user',
-    }
-}, {timestamps: true})
+userSchema.set('toJSON', {
+    transform: (doc, { password, ...userData }, options) => userData,
+})
 
-const User = model("user", userSchema)
+const User = model('user', userSchema)
 
 module.exports = User

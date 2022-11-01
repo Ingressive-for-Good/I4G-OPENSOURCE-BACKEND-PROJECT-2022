@@ -4,6 +4,7 @@ const helmet = require('helmet')
 const passport = require('passport')
 const session = require('express-session')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 const userRoutes = require('./modules/user/user.route')
 const productRoutes = require('./modules/product/product.route')
@@ -20,6 +21,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
     .use(express.json({ limit: '50kb' }))
     .use(cors())
+    .use(cookieParser())
     .use(helmet())
     .use(
         session({
