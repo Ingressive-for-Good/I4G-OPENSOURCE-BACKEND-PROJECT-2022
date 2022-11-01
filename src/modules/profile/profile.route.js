@@ -5,12 +5,17 @@ const {
     updateProfile,
     deleteAccount,
 } = require('./profile.controller')
+const upload = require('../../utils/multer')
+const multerErrorHandler = require('../../middlewares/multer-errorHandler')
+const { auth } = require('../../middlewares/auth.middleware')
 
-//User must be signed it to access profile
-//Todo - Add authorization middleware here
-
-profileRoute.get('/', getProfile)
-profileRoute.patch('/', updateProfile)
-profileRoute.delete('/', deleteAccount)
+profileRoute.get('/', auth, getProfile)
+profileRoute.patch(
+    '/',
+    auth,
+    [upload.single('profilePicture'), multerErrorHandler],
+    updateProfile
+)
+profileRoute.delete('/', auth, deleteAccount)
 
 module.exports = profileRoute

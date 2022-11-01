@@ -1,76 +1,88 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-
-const User = require('./user.model')
-const { API_SECRET } = require('../../utils/config')
-const {createUser} = require("./user.service")
-const {handleResponse} = require("../../utils/helpers")
-
+const { createUser, findUser, findUserByEmail } = require('./user.service')
+const {
+    handleResponse,
+    isPasswordMatch,
+    generateToken,
+} = require('../../utils/helpers')
 
 module.exports = {
-    authenticateUser: async (req, res)=>{
-        const {email, password} = req.body
+    createUser: async (req, res) => {
         try {
-            const user = await User.findOne({email})
-            if(user){
-                bcrypt.compare(password, user.password)
-                    .then(_=>{
-                        const token = jwt.sign({
-                            ...user,
-                            password: undefined
-                        }, API_SECRET, {expiresIn: "1d"})
-                        return res.status(201).json({
-                            user,
-                            token,
-                            status: 201,
-                            validity: "24h",
-                            refreshed: false,
-                            message: "user session started.",
-                            created_at: new Date().toJSON("time"),
-                        })
-                    })
-                    .catch(err=>{
-                        return res.status(501).json({
-                            ...err,
-                            message: "A server error occured, and could not login user",
-                            token: "null",
-                            status: 501
-                        }) 
-                    })
+            const response = await createUser(req.body)
+
+            res.status(201).json(handleResponse(response))
+        } catch (err) {
+            res.status(500).send({ success: false, message: err.message })
+        }
+    },
+    loginUser: async (req, res) => {
+        if (!req.body.email || !req.body.password) {
+            return res.status(400).send({
+                success: false,
+                message: 'Required fields are missing',
+            })
+        }
+        try {
+            const user = await findUserByEmail(req.body.email)
+
+            if (!user) {
+                return res.status(400).send({
+                    success: false,
+                    message: `User with email ${req.body.email} does not exist`,
+                })
             }
-        } catch (error) {
-            return res.status(501).json({
-                ...error,
-                message: "A server error occured, and could not login user",
-                status: 501
-            }) 
-        }
-    },
-
-    verifyUser: (req, res, next) => {
-        try {
-            const token = req.headers['Authorization'].split(' ')[1]
-            req.user = jwt.verify(token, API_SECRET)
-            next()
-        } catch (error) {
-            return res.status(401).json({...error,status: 401, message: "Error verifying user"})
-            // handle the error, in the preceding middleware.
-            // next(error)            
-        }
-    },
-
-    createUser: async(req, res) => {
-       try {
-
-            const response = await createUser(
-                req.body
+            const checkPassword = isPasswordMatch(
+                req.body.password,
+                user.password
             )
+            if (!checkPassword) {
+                return res.status(400).send({
+                    success: false,
+                    message: 'Invalid email or password',
+                })
+            }
+            const token = generateToken(user._id)
+            res.cookie('token', token, {
+                path: '/',
+                httpOnly: true,
+                // expires in 7 days
+                expires: new Date(Date.now() + 1000 * 24 * 60 * 60 * 7),
+                // uncomment the code below in production (used for https requests)
+                // sameSite: 'none',
+                // secure: true,
+            })
+            res.status(200).json(handleResponse(user))
+        } catch (err) {
+            res.status(500).send({ success: false, message: err.message })
+        }
+    },
+    logoutUser: async (req, res) => {
+        res.cookie('token', '', {
+            path: '/',
+            httpOnly: true,
+            // expires in 0s
+            expires: new Date(0),
+            // required for https requests (used in production)
+            // sameSite: 'none',
+            // secure: true,
+        })
+        return res
+            .status(200)
+            .send({ success: true, message: 'User logged out successfully' })
+    },
+    findUser: async (req, res) => {
+        const { userId } = req.params
+        try {
+            const user = await findUser(userId)
+            if (!user)
+                return res.status(404).send({
+                    success: false,
+                    message: `User with id: ${userId} doesn't exist`,
+                })
 
-            res.json( handleResponse(response) )
-       } catch (error) {
-        
-            return error
-       }
-    }
-
+            res.status(200).json(handleResponse(user))
+        } catch (err) {
+            res.status(500).send({ success: false, message: err.message })
+        }
+    },
 }
