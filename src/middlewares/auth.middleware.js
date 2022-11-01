@@ -26,6 +26,17 @@ const auth = async (req, res, next) => {
     }
 }
 
+const authAdmin = async (req, res, next) => {
+    auth(req, res, () => {
+        if (req.user.role === 'admin') {
+            next()
+        } else {
+            res.status(403).send({ success: false, message: 'Not Authorized' })
+        }
+    })
+}
+
 module.exports = {
     auth,
+    authAdmin,
 }

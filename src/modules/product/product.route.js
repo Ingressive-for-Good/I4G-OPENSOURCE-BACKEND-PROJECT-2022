@@ -6,14 +6,25 @@ const {
     updateProduct,
     getSingleProduct,
 } = require('./product.controller')
+const { auth } = require('../../middlewares/auth.middleware')
 
 const upload = require('../../utils/multer')
 const multerErrorHandler = require('../../middlewares/multer-errorHandler')
 
-router.post('/', [upload.array('images', 3), multerErrorHandler], createProduct)
+router.post(
+    '/',
+    auth,
+    [upload.array('images', 3), multerErrorHandler],
+    createProduct
+)
 router.get('/', getAllProducts)
-router.delete('/:productId', deleteProduct)
-router.patch('/:productId', [upload.array('images', 3), multerErrorHandler], updateProduct)
+router.delete('/:productId', auth, deleteProduct)
+router.patch(
+    '/:productId',
+    auth,
+    [upload.array('images', 3), multerErrorHandler],
+    updateProduct
+)
 router.get('/:productId', getSingleProduct)
 
 module.exports = router
