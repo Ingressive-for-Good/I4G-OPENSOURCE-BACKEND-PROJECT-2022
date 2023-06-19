@@ -4,11 +4,14 @@ const helmet = require('helmet')
 const passport = require('passport')
 const session = require('express-session')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 const userRoutes = require('./modules/user/user.route')
 const productRoutes = require('./modules/product/product.route')
 const profileRoutes = require('./modules/profile/profile.route')
 const categoryRoutes = require('./modules/category/category.route')
+const chatRoutes = require('./modules/chat/chat.route')
+const messageRoutes = require('./modules/message/message.route')
 
 const app = express()
 
@@ -18,6 +21,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
     .use(express.json({ limit: '50kb' }))
     .use(cors())
+    .use(cookieParser())
     .use(helmet())
     .use(
         session({
@@ -35,6 +39,8 @@ app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/categories', categoryRoutes)
 app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/profile', profileRoutes)
+app.use('/api/v1/chats', chatRoutes)
+app.use('/api/v1/messages', messageRoutes)
 
 // redirect to google sign in page
 app.get(

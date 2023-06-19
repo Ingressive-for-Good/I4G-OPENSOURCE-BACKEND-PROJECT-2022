@@ -2,7 +2,6 @@ require('dotenv').config()
 
 const { env } = process
 
-
 module.exports = {
     PORT: env.port || 5000,
     CLOUD_NAME: env.cloud_name,
@@ -16,6 +15,7 @@ module.exports = {
     FACEBOOK_CLIENT_SECRET: env.facebook_client_secret,
     FACEBOOK_CALLBACKURL: env.facebook_callbackURL,
     mailtrapPassword: env.password,
-    mailtrapUsername:  env.username,
-    host: env.host || ""
+    mailtrapUsername: env.username,
+    host: env.host || '',
+    JWT_SECRET: env.jwt_secret,
 }
